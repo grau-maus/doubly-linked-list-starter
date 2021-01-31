@@ -9,12 +9,10 @@ Keep making the top-most test pass until all tests pass.
 
 ## Instructions
 
-* Clone the project from
-  https://github.com/appacademy-starters/data-structures-linked-list-starter.
 * `cd` into the project folder
 * `npm install` to install dependencies in the project root directory
 * `npm install chai-exclude` to install chai-exclude
-* `npm test` to run the specs
+* `mocha` to run the specs
 * You can view the test cases in `/test/test.js`. Your job is to write code in
   the `/lib/linked_list.js` that implements the `Node` and `LinkedList` classes
   to make the tests pass.

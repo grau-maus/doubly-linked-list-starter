@@ -2,7 +2,6 @@ const { Node, LinkedList } = require("../lib/linked_list.js");
 const { expect } = require("chai");
 const chai = require("chai");
 const chaiExclude = require("chai-exclude");
-
 chai.use(chaiExclude);
 
 describe("LinkedList", () => {
@@ -20,13 +19,11 @@ describe("LinkedList", () => {
         it('Should be a function (ES6 classes are "special functions")', () => {
             expect(Node).to.be.a("function");
         });
-        // it('Should have "value" and "next" properties', () => {
         it("Should have value, next, and prev properties", () => {
-            // Doubly Linked Lists Only!
             node = new Node("A");
             expect(node).to.have.property("value");
             expect(node).to.have.property("next");
-            expect(node).to.have.property("prev"); // Doubly Linked Lists Only!
+            expect(node).to.have.property("prev");
         });
     });
 
@@ -88,8 +85,6 @@ describe("LinkedList", () => {
                     tail: { value: "A", next: null, prev: null },
                     length: 1,
                 });
-                // console.log(linkedList);
-                // linkedList.addToTail("B");
                 expect(linkedList.addToTail("B")).excluding(`[Circular]`).to.eql({
                     head: {
                         value: "A",
@@ -103,7 +98,6 @@ describe("LinkedList", () => {
                     },
                     length: 2
                 });
-                // console.log(linkedList);
             });
         });
 

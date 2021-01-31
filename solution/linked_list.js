@@ -93,7 +93,7 @@ class LinkedList {
             this.head = nextHead;
         }
 
-        // oldHead.next = null;                   //<=== cuts references to linked-list
+        oldHead.next = null;
         this.length--;
 
         return oldHead;
@@ -212,14 +212,14 @@ class LinkedList {
                 if (i === index) {
                     removedNode = currNode;
 
-                    // currObj.next = null;                     //<=== cuts references to linked-list
-                    // currObj.prev = null;                     //<=== cuts references to linked-list
 
                     const prevNode = currNode.prev;
                     const nextNode = currNode.next;
 
                     prevNode.next = nextNode;
                     nextNode.prev = prevNode;
+                    currNode.next = null;
+                    currNode.prev = null;
                 }
 
                 currNode = currNode.next;

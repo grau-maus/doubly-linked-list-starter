@@ -249,7 +249,7 @@ describe("LinkedList", () => {
                 linkedList.addToTail('A');
                 linkedList.addToTail('B');
                 expect(linkedList.removeHead()).to.eql({
-                    value: 'A', next: { value: 'B', next: null, prev: null }, prev: null
+                    value: 'A', next: null, prev: null
                 });
             });
         });
@@ -404,16 +404,8 @@ describe("LinkedList", () => {
                 linkedList.addToTail('C');
                 expect(linkedList.remove(1)).excluding(`[Circular]`).to.eql({
                     value: 'B',
-                    next: {
-                        value: 'C',
-                        next: null,
-                        prev: { value: 'A', next: `[Circular]`, prev: null }
-                    },
-                    prev: {
-                        value: 'A',
-                        next: { value: 'C', next: null, prev: `[Circular]` },
-                        prev: null
-                    }
+                    next: null,
+                    prev: null
                 });
             });
 

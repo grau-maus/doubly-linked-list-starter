@@ -22,8 +22,8 @@ class LinkedList {
         const newNode = new Node(val);
 
         if (!this.length) {
-            this.head = newNode;
             this.tail = newNode;
+            this.head = this.tail;
         } else {
             const oldTail = this.tail;
 
@@ -46,7 +46,7 @@ class LinkedList {
             this.head = null;
             this.tail = null;
         } else {
-            const prevTail = this.tail.prev;
+            const prevTail = oldTail.prev;
 
             prevTail.next = null;
             this.tail = prevTail;
@@ -63,7 +63,7 @@ class LinkedList {
 
         if (!this.length) {
             this.head = newNode;
-            this.tail = this.head;
+            this.tail = newNode;
         } else {
             const oldHead = this.head;
 
@@ -83,10 +83,9 @@ class LinkedList {
         const oldHead = this.head;
 
         if (this.length === 1) {
-            this.head = null;
             this.tail = null;
+            this.head = null;
         } else {
-            const oldHead = this.head;
             const nextHead = oldHead.next;
 
             nextHead.prev = null;
@@ -100,8 +99,6 @@ class LinkedList {
     }
 
     contains(target) {
-        if (!this.length) return;
-
         let currNode = this.head;
 
         while (currNode) {
@@ -117,6 +114,8 @@ class LinkedList {
 
     get(index) {
         if (index >= this.length || index < 0) return null;
+        if (index === 0) return this.head;
+        if (index === this.length - 1) return this.tail;
 
         let currNode = this.head;
 
@@ -132,38 +131,9 @@ class LinkedList {
     set(index, val) {
         if (index >= this.length || index < 0) return false;
 
-        const newNode = new Node(val);
+        const currNode = this.get(index);
 
-        if (index === 0) {
-            const nextNode = this.head.next;
-
-            newNode.next = nextNode;
-            nextNode.prev = newNode;
-            this.head = newNode;
-        } else if (index === this.length - 1) {
-            const prevNode = this.tail.prev;
-
-            newNode.prev = prevNode;
-            prevNode.next = newNode;
-            this.tail = newNode;
-        } else {
-            let currNode = this.head;
-
-            for (let i = 0; i <= index; i++) {
-                if (i === index) {
-                    const prevNode = currNode.prev;
-                    const nextNode = currNode.next;
-
-                    newNode.next = nextNode;
-                    newNode.prev = prevNode;
-                    nextNode.prev = newNode;
-                    prevNode.next = newNode;
-                    currNode = newNode;
-                }
-
-                currNode = currNode.next;
-            }
-        }
+        currNode.value = val;
 
         return true;
     }
@@ -171,26 +141,18 @@ class LinkedList {
     insert(index, val) {
         if (index >= this.length || index < 0) return false;
 
-        const newNode = new Node(val);
-
         if (index === 0) {
             this.addToHead(val);
         } else {
-            let currNode = this.head;
+            let currNode = this.get(index);
+            const newNode = new Node(val);
+            const prevNode = currNode.prev;
 
-            for (let i = 0; i <= index; i++) {
-                if (i === index) {
-                    const prevNode = currNode.prev;
-
-                    newNode.prev = prevNode;
-                    newNode.next = currNode;
-                    prevNode.next = newNode;
-                    currNode.prev = newNode;
-                    this.length++;
-                }
-
-                currNode = currNode.next;
-            }
+            newNode.prev = prevNode;
+            newNode.next = currNode;
+            prevNode.next = newNode;
+            currNode.prev = newNode;
+            this.length++;
         }
 
         return true;
@@ -199,36 +161,24 @@ class LinkedList {
     remove(index) {
         if (index >= this.length || index < 0) return;
 
-        let removedNode;
+        let oldNode = this.get(index);
 
         if (index === 0) {
             this.removeHead();
         } else if (index === this.length - 1) {
             this.removeTail();
         } else {
-            let currNode = this.head;
+            const prevNode = oldNode.prev;
+            const nextNode = oldNode.next;
 
-            for (let i = 0; i <= index; i++) {
-                if (i === index) {
-                    removedNode = currNode;
-
-
-                    const prevNode = currNode.prev;
-                    const nextNode = currNode.next;
-
-                    prevNode.next = nextNode;
-                    nextNode.prev = prevNode;
-                    currNode.next = null;
-                    currNode.prev = null;
-                }
-
-                currNode = currNode.next;
-            }
-
+            prevNode.next = nextNode;
+            nextNode.prev = prevNode;
+            oldNode.next = null;
+            oldNode.prev = null;
             this.length--;
         }
 
-        return removedNode;
+        return oldNode;
     }
 
     size() {

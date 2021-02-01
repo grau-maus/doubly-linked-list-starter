@@ -385,13 +385,13 @@ describe("LinkedList", () => {
 						next: { value: "D", next: null, prev: `[Circular]` },
 						prev: { value: "A", next: `[Circular]`, prev: null },
 					});
-				expect(linkedList.insert(3, "C")).to.equal(true);
+				expect(linkedList.insert(2, "C")).to.equal(true);
 				expect(linkedList.get(2))
 					.excluding(`[Circular]`)
 					.to.eql({
-						value: "D",
+						value: "C",
 						next: {
-							value: "C",
+							value: "D",
 							next: null,
 							prev: `[Circular]`,
 						},

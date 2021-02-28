@@ -19,11 +19,11 @@ describe("LinkedList", () => {
 		it('Should be a function (ES6 classes are "special functions")', () => {
 			expect(Node).to.be.a("function");
 		});
-		it("Should have value, next, and prev properties", () => {
+		it("Should have value, next, and previous properties", () => {
 			node = new Node("A");
 			expect(node).to.have.property("value");
 			expect(node).to.have.property("next");
-			expect(node).to.have.property("prev");
+			expect(node).to.have.property("previous");
 		});
 	});
 
@@ -69,8 +69,8 @@ describe("LinkedList", () => {
 			});
 			it("Should reassign both the head and tail pointers when a new node is added to the tail of an empty list", () => {
 				linkedList.addToTail("A");
-				expect(linkedList.head).to.eql({ value: "A", next: null, prev: null });
-				expect(linkedList.tail).to.eql({ value: "A", next: null, prev: null });
+				expect(linkedList.head).to.eql({ value: "A", next: null, previous: null });
+				expect(linkedList.tail).to.eql({ value: "A", next: null, previous: null });
 			});
 			it("Should update the length property after new nodes are added to the tail", () => {
 				expect(linkedList.length).to.equal(0);
@@ -81,8 +81,8 @@ describe("LinkedList", () => {
 			});
 			it("Should return the updated list after new nodes are added to the tail", () => {
 				expect(linkedList.addToTail("A")).to.eql({
-					head: { value: "A", next: null, prev: null },
-					tail: { value: "A", next: null, prev: null },
+					head: { value: "A", next: null, previous: null },
+					tail: { value: "A", next: null, previous: null },
 					length: 1,
 				});
 				expect(linkedList.addToTail("B"))
@@ -90,13 +90,13 @@ describe("LinkedList", () => {
 					.to.eql({
 						head: {
 							value: "A",
-							next: { value: "B", next: null, prev: `[Circular]` },
-							prev: null,
+							next: { value: "B", next: null, previous: `[Circular]` },
+							previous: null,
 						},
 						tail: {
 							value: "B",
 							next: null,
-							prev: { value: "A", next: `[Circular]`, prev: null },
+							previous: { value: "A", next: `[Circular]`, previous: null },
 						},
 						length: 2,
 					});
@@ -133,10 +133,10 @@ describe("LinkedList", () => {
 					.to.eql({
 						value: "C",
 						next: null,
-						prev: {
+						previous: {
 							value: "B",
 							next: `[Circular]`,
-							prev: { value: "A", next: `[Circular]`, prev: null },
+							previous: { value: "A", next: `[Circular]`, previous: null },
 						},
 					});
 				linkedList.removeTail();
@@ -159,7 +159,7 @@ describe("LinkedList", () => {
 				expect(linkedList.removeTail()).to.eql({
 					value: "B",
 					next: null,
-					prev: null,
+					previous: null,
 				});
 			});
 		});
@@ -168,21 +168,21 @@ describe("LinkedList", () => {
 			it("Should reassign the head pointer when new nodes are added to the head", () => {
 				expect(linkedList.head).to.equal(null);
 				linkedList.addToHead("B");
-				expect(linkedList.head).to.eql({ value: "B", next: null, prev: null });
+				expect(linkedList.head).to.eql({ value: "B", next: null, previous: null });
 				linkedList.addToHead("A");
 				expect(linkedList.head)
 					.excluding(`[Circular]`)
 					.to.eql({
 						value: "A",
-						next: { value: "B", next: null, prev: `[Circular]` },
-						prev: null,
+						next: { value: "B", next: null, previous: `[Circular]` },
+						previous: null,
 					});
 			});
 
 			it("Should reassign both the head and tail pointers when a new node is added to the head of an empty list", () => {
 				linkedList.addToHead("A");
-				expect(linkedList.head).to.eql({ value: "A", next: null, prev: null });
-				expect(linkedList.tail).to.eql({ value: "A", next: null, prev: null });
+				expect(linkedList.head).to.eql({ value: "A", next: null, previous: null });
+				expect(linkedList.tail).to.eql({ value: "A", next: null, previous: null });
 			});
 
 			it("Should update the length property after new nodes are added to the head", () => {
@@ -195,8 +195,8 @@ describe("LinkedList", () => {
 
 			it("Should return the updated list after new nodes are added to the head", () => {
 				expect(linkedList.addToHead("B")).to.eql({
-					head: { value: "B", next: null, prev: null },
-					tail: { value: "B", next: null, prev: null },
+					head: { value: "B", next: null, previous: null },
+					tail: { value: "B", next: null, previous: null },
 					length: 1,
 				});
 				expect(linkedList.addToHead("A"))
@@ -204,13 +204,13 @@ describe("LinkedList", () => {
 					.to.eql({
 						head: {
 							value: "A",
-							next: { value: "B", next: null, prev: `[Circular]` },
-							prev: null,
+							next: { value: "B", next: null, previous: `[Circular]` },
+							previous: null,
 						},
 						tail: {
 							value: "B",
 							next: null,
-							prev: { value: "A", next: `[Circular]`, prev: null },
+							previous: { value: "A", next: `[Circular]`, previous: null },
 						},
 						length: 2,
 					});
@@ -262,7 +262,7 @@ describe("LinkedList", () => {
 				expect(linkedList.removeHead()).to.eql({
 					value: "A",
 					next: null,
-					prev: null,
+					previous: null,
 				});
 			});
 		});
@@ -299,31 +299,81 @@ describe("LinkedList", () => {
 					.excluding(`[Circular]`)
 					.to.eql({
 						value: "B",
-						next: { value: "C", next: null, prev: `[Circular]` },
-						prev: { value: "A", next: `[Circular]`, prev: null },
+						next: { value: "C", next: null, previous: `[Circular]` },
+						previous: { value: "A", next: `[Circular]`, previous: null },
+					});
+			});
+
+			it("Should return node at first index when get is called", () => {
+				linkedList.addToTail("A");
+				linkedList.addToTail("B");
+				expect(linkedList.get(0))
+					.excluding(`[Circular]`)
+					.to.eql({
+						value: "A",
+						next: { value: "B", next: null, previous: `[Circular]` },
+						previous: null
+					});
+			});
+
+			it("Should return node at last index when get is called", () => {
+				linkedList.addToTail("A");
+				linkedList.addToTail("B");
+				linkedList.addToTail("C");
+				linkedList.addToTail("D");
+				linkedList.addToTail("E");
+				expect(linkedList.get(4))
+					.excluding(`[Circular]`)
+					.to.eql({
+						value: "E",
+						next: null,
+						previous: {
+							value: "D",
+							next: `[Circular]`,
+							previous: {
+								value: "C",
+								next: `[Circular]`,
+								previous: {
+									value: "B",
+									next: `[Circular]`,
+									previous: { value: "A", next: `[Circular]`, previous: null }
+								}
+							}
+						},
 					});
 			});
 		});
 
 		describe("set", () => {
-			it("Should return true if node's value at index is updated", () => {
+			it("Should return true if node's value at last index is updated", () => {
 				linkedList.addToTail("A");
 				linkedList.addToTail("B");
 				linkedList.addToTail("D");
-				expect(linkedList.get(1))
-					.excluding(`[Circular]`)
-					.to.eql({
-						value: "B",
-						next: { value: "D", next: null, prev: `[Circular]` },
-						prev: { value: "A", next: `[Circular]`, prev: null },
-					});
 				expect(linkedList.set(2, "C")).to.equal(true);
 				expect(linkedList.get(1))
 					.excluding(`[Circular]`)
 					.to.eql({
 						value: "B",
-						next: { value: "C", next: null, prev: `[Circular]` },
-						prev: { value: "A", next: `[Circular]`, prev: null },
+						next: { value: "C", next: null, previous: `[Circular]` },
+						previous: { value: "A", next: `[Circular]`, previous: null },
+					});
+			});
+
+			it("Should return true if node's value at first index is updated", () => {
+				linkedList.addToTail("A");
+				linkedList.addToTail("B");
+				linkedList.addToTail("D");
+				expect(linkedList.set(0, "C")).to.equal(true);
+				expect(linkedList.get(1))
+					.excluding(`[Circular]`)
+					.to.eql({
+						value: "B",
+						next: {
+							value: "D",
+							next: null,
+							previous: `[Circular]`
+						},
+						previous: { value: "C", next: `[Circular]`, previous: null },
 					});
 			});
 
@@ -342,35 +392,28 @@ describe("LinkedList", () => {
 				expect(linkedList.insert(4, "D")).to.equal(false);
 			});
 
-			it("Should return true if node is successfully inserted at index", () => {
+			it("Should return true if node is successfully inserted at specified index", () => {
 				linkedList.addToTail("A");
 				linkedList.addToTail("B");
 				linkedList.addToTail("D");
+				expect(linkedList.insert(1, "C")).to.equal(true);
 				expect(linkedList.get(1))
 					.excluding(`[Circular]`)
 					.to.eql({
-						value: "B",
-						next: { value: "D", next: null, prev: `[Circular]` },
-						prev: { value: "A", next: `[Circular]`, prev: null },
-					});
-				expect(linkedList.insert(2, "C")).to.equal(true);
-				expect(linkedList.get(1))
-					.excluding(`[Circular]`)
-					.to.eql({
-						value: "B",
+						value: "C",
 						next: {
-							value: "C",
+							value: "B",
 							next: {
 								value: "D",
 								next: null,
-								prev: `[Circular]`,
+								previous: `[Circular]`,
 							},
-							prev: `[Circular]`,
+							previous: `[Circular]`,
 						},
-						prev: {
+						previous: {
 							value: "A",
 							next: `[Circular]`,
-							prev: null,
+							previous: null,
 						},
 					});
 			});
@@ -378,13 +421,6 @@ describe("LinkedList", () => {
 				linkedList.addToTail("A");
 				linkedList.addToTail("B");
 				linkedList.addToTail("D");
-				expect(linkedList.get(1))
-					.excluding(`[Circular]`)
-					.to.eql({
-						value: "B",
-						next: { value: "D", next: null, prev: `[Circular]` },
-						prev: { value: "A", next: `[Circular]`, prev: null },
-					});
 				expect(linkedList.insert(2, "C")).to.equal(true);
 				expect(linkedList.get(2))
 					.excluding(`[Circular]`)
@@ -393,12 +429,12 @@ describe("LinkedList", () => {
 						next: {
 							value: "D",
 							next: null,
-							prev: `[Circular]`,
+							previous: `[Circular]`,
 						},
-						prev: {
+						previous: {
 							value: "B",
 							next: `[Circular]`,
-							prev: { value: "A", next: `[Circular]`, prev: null },
+							previous: { value: "A", next: `[Circular]`, previous: null },
 						},
 					});
 			});
@@ -436,19 +472,19 @@ describe("LinkedList", () => {
 							next: {
 								value: "C",
 								next: null,
-								prev: `[Circular]`,
+								previous: `[Circular]`,
 							},
-							prev: `[Circular]`,
+							previous: `[Circular]`,
 						},
-						prev: null,
+						previous: null,
 					});
 				linkedList.remove(1);
 				expect(linkedList.get(0))
 					.excluding(`[Circular]`)
 					.to.eql({
 						value: "A",
-						next: { value: "C", next: null, prev: `[Circular]` },
-						prev: null,
+						next: { value: "C", next: null, previous: `[Circular]` },
+						previous: null,
 					});
 			});
 
@@ -459,7 +495,7 @@ describe("LinkedList", () => {
 				expect(linkedList.remove(1)).excluding(`[Circular]`).to.eql({
 					value: "B",
 					next: null,
-					prev: null,
+					previous: null,
 				});
 			});
 

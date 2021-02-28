@@ -2,7 +2,7 @@ class Node {
     constructor(value) {
         this.value = value;
         this.next = null;
-        this.prev = null;
+        this.previous = null;
     }
 }
 
@@ -28,7 +28,7 @@ class LinkedList {
             const oldTail = this.tail;
 
             oldTail.next = newNode;
-            newNode.prev = oldTail;
+            newNode.previous = oldTail;
             this.tail = newNode;
         }
 
@@ -46,13 +46,13 @@ class LinkedList {
             this.head = null;
             this.tail = null;
         } else {
-            const prevTail = oldTail.prev;
+            const prevTail = oldTail.previous;
 
             prevTail.next = null;
             this.tail = prevTail;
         }
 
-        oldTail.prev = null;
+        oldTail.previous = null;
         this.length--;
 
         return oldTail;
@@ -67,7 +67,7 @@ class LinkedList {
         } else {
             const oldHead = this.head;
 
-            oldHead.prev = newNode;
+            oldHead.previous = newNode;
             newNode.next = oldHead;
             this.head = newNode;
         }
@@ -88,7 +88,7 @@ class LinkedList {
         } else {
             const nextHead = oldHead.next;
 
-            nextHead.prev = null;
+            nextHead.previous = null;
             this.head = nextHead;
         }
 
@@ -146,12 +146,12 @@ class LinkedList {
         } else {
             let currNode = this.get(index);
             const newNode = new Node(val);
-            const prevNode = currNode.prev;
+            const prevNode = currNode.previous;
 
-            newNode.prev = prevNode;
+            newNode.previous = prevNode;
             newNode.next = currNode;
             prevNode.next = newNode;
-            currNode.prev = newNode;
+            currNode.previous = newNode;
             this.length++;
         }
 
@@ -168,13 +168,13 @@ class LinkedList {
         } else if (index === this.length - 1) {
             this.removeTail();
         } else {
-            const prevNode = oldNode.prev;
+            const prevNode = oldNode.previous;
             const nextNode = oldNode.next;
 
             prevNode.next = nextNode;
-            nextNode.prev = prevNode;
+            nextNode.previous = prevNode;
             oldNode.next = null;
-            oldNode.prev = null;
+            oldNode.previous = null;
             this.length--;
         }
 

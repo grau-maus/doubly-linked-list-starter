@@ -159,7 +159,11 @@ describe("LinkedList", () => {
 				expect(linkedList.removeTail()).to.eql({
 					value: "B",
 					next: null,
-					previous: null,
+					previous: {
+						value: "A",
+						next: null,
+						previous: null
+					},
 				});
 			});
 		});
@@ -261,7 +265,7 @@ describe("LinkedList", () => {
 				linkedList.addToTail("B");
 				expect(linkedList.removeHead()).to.eql({
 					value: "A",
-					next: null,
+					next: { value: "B", next: null, previous: null },
 					previous: null,
 				});
 			});
@@ -463,21 +467,6 @@ describe("LinkedList", () => {
 				linkedList.addToTail("A");
 				linkedList.addToTail("B");
 				linkedList.addToTail("C");
-				expect(linkedList.get(0))
-					.excluding(`[Circualr]`)
-					.to.eql({
-						value: "A",
-						next: {
-							value: "B",
-							next: {
-								value: "C",
-								next: null,
-								previous: `[Circular]`,
-							},
-							previous: `[Circular]`,
-						},
-						previous: null,
-					});
 				linkedList.remove(1);
 				expect(linkedList.get(0))
 					.excluding(`[Circular]`)
@@ -494,8 +483,8 @@ describe("LinkedList", () => {
 				linkedList.addToTail("C");
 				expect(linkedList.remove(1)).excluding(`[Circular]`).to.eql({
 					value: "B",
-					next: null,
-					previous: null,
+					next: { value: "C", next: null, previous: { value: "A", next: `[Circular]`, previous: null } },
+					previous: { value: "A", next: { value: "C", next: null, previous: `[Circular]` }, previous: null },
 				});
 			});
 

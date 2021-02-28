@@ -52,7 +52,6 @@ class LinkedList {
             this.tail = prevTail;
         }
 
-        oldTail.previous = null;
         this.length--;
 
         return oldTail;
@@ -92,7 +91,6 @@ class LinkedList {
             this.head = nextHead;
         }
 
-        oldHead.next = null;
         this.length--;
 
         return oldHead;
@@ -173,8 +171,6 @@ class LinkedList {
 
             prevNode.next = nextNode;
             nextNode.previous = prevNode;
-            oldNode.next = null;
-            oldNode.previous = null;
             this.length--;
         }
 
